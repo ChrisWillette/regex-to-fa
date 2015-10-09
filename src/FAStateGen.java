@@ -251,17 +251,16 @@ public class FAStateGen {
 			Collections.sort(result.stateList);
 			FileWriter fw = new FileWriter(out.getAbsoluteFile());
 			BufferedWriter bw = new BufferedWriter(fw);
+			bw.write("start state is " + result.start + "\r\n" )
 			for(int i = 0; i < result.stateList.size(); i++){
-				String entry = "\r\n" + "(q" + result.stateList.get(i).number +  " , " +
+				String entry =  "(q" + result.stateList.get(i).number +  " , " +
 						result.stateList.get(i).input + ") --> " +
 						result.stateList.get(i).next;				
-				if(result.stateList.get(i).isStart == true)
-					entry = " S";
-				if(result.stateList.get(i).isEnd == true)
-					entry = entry + " F";		
+					
 				//entry = entry + "\r\n";
 				bw.write(entry);
 			}
+			bw.write("\r\nFinal state is " + result.end)
 			bw.close();
 			
 		}catch (IOException e){
