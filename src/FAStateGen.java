@@ -30,8 +30,7 @@ public class FAStateGen {
 		int number;
 		char input;
 		int next;
-		Boolean isStart; //flag set for printing purposes
-		Boolean isEnd;  //same		
+	
 	
 	@Override
 	public int compareTo(State other){
@@ -85,15 +84,6 @@ public class FAStateGen {
 				faNew.stateList.addAll(fa2.stateList);
 				faNew.start = fa1.start;
 				faNew.end = fa2.end;
-				//now cleaning up start/end flags
-				for(int j = 0; j < faNew.stateList.size(); j++){
-					if(faNew.stateList.get(j).number !=  faNew.start)
-						faNew.stateList.get(j).isStart = false;
-					else faNew.stateList.get(j).isStart = true;
-					if(faNew.stateList.get(j).number !=  faNew.end)
-						faNew.stateList.get(j).isEnd = false;
-					else faNew.stateList.get(j).isEnd = true;
-				}
 				faNew.isEmpty = false;
 				st.push(faNew);
 				
@@ -107,9 +97,7 @@ public class FAStateGen {
 					State ns1 = new State();
 					ns1.number = stateCount;
 					ns1.next = stateCount;
-					ns1.input = 'E';
-					ns1.isEnd = true;
-					ns1.isStart = true;				
+					ns1.input = 'E';		
 					FA fa = new FA();
 					fa.stateList.add(ns1);				
 					fa.start = ns1.number;
@@ -152,16 +140,7 @@ public class FAStateGen {
 				faNew.stateList.add(post1);
 				faNew.stateList.add(post2);
 				faNew.end = stateCount;
-				//now cleaning up start/end flags
 				faNew.isEmpty = false;
-				for(int j = 0; j < faNew.stateList.size(); j++){
-					if(faNew.stateList.get(j).number !=  faNew.start)
-						faNew.stateList.get(j).isStart = false;
-					else faNew.stateList.get(j).isStart = true;
-					if(faNew.stateList.get(j).number !=  faNew.end)
-						faNew.stateList.get(j).isEnd = false;
-					else faNew.stateList.get(j).isEnd = true;
-				}
 				st.push(faNew);
 				
 			}else if(input == '*'){//fa*				
@@ -176,20 +155,11 @@ public class FAStateGen {
 				post.number = fa.end;
 				pre.next = fa.start;
 				post.next = pre.number;
-				pre.isEnd = true;
-				pre.isStart = true;
 				faNew.stateList.add(pre);
 				faNew.stateList.addAll(fa.stateList);
 				faNew.stateList.add(post);
-				//kleene house (lololol)
-				for(int j = 0; j < faNew.stateList.size(); j++){
-					if(faNew.stateList.get(j).number !=  faNew.start)
-						faNew.stateList.get(j).isStart = false;
-					else faNew.stateList.get(j).isStart = true;
-					if(faNew.stateList.get(j).number !=  faNew.end)
-						faNew.stateList.get(j).isEnd = false;
-					else faNew.stateList.get(j).isEnd = true;
-				}
+				faNew.start = pre.number;
+				faNew.end = pre.number;
 				faNew.isEmpty = false;
 				st.push(faNew);
 				
@@ -198,9 +168,7 @@ public class FAStateGen {
 				State ns1 = new State();
 				ns1.number = stateCount;
 				ns1.next = stateCount;
-				ns1.input = 'E';
-				ns1.isEnd = true;
-				ns1.isStart = true;				
+				ns1.input = input;		
 				FA fa = new FA();
 				fa.stateList.add(ns1);				
 				fa.start = ns1.number;
@@ -214,16 +182,11 @@ public class FAStateGen {
 				ns1.number = stateCount;
 				stateCount++;
 				ns1.next = stateCount;
-				ns1.input = 'E';
-				ns1.isEnd = false;
-				ns1.isStart = true;
+				ns1.input = input;
 				ns2.number = ns1.next;
-				ns2.input = input;
-				ns2.isEnd = true;
-				ns2.isStart = false;
 				FA fa = new FA();
 				fa.stateList.add(ns1);
-				fa.stateList.add(ns2);
+				//fa.stateList.add(ns2);
 				fa.start = ns1.number;
 				fa.end = ns2.number;
 				fa.isEmpty = false;
@@ -251,17 +214,14 @@ public class FAStateGen {
 			Collections.sort(result.stateList);
 			FileWriter fw = new FileWriter(out.getAbsoluteFile());
 			BufferedWriter bw = new BufferedWriter(fw);
+			bw.write("start state: q" + result.start);
 			for(int i = 0; i < result.stateList.size(); i++){
-				String entry = "\r\n" + "(q" + result.stateList.get(i).number +  " , " +
-						result.stateList.get(i).input + ") --> " +
+				String entry = "\r\n" + "(q" + result.stateList.get(i).number +  ", " +
+						result.stateList.get(i).input + ") --> q" +
 						result.stateList.get(i).next;				
-				if(result.stateList.get(i).isStart == true)
-					entry = " S";
-				if(result.stateList.get(i).isEnd == true)
-					entry = entry + " F";		
-				//entry = entry + "\r\n";
 				bw.write(entry);
 			}
+			bw.write("\r\nend state: q" + result.end);
 			bw.close();
 			
 		}catch (IOException e){
