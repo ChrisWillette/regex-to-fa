@@ -60,6 +60,9 @@ public class FAStateGen {
 		FA machine = new FA();
 		for(int i = 0; i < line.length(); i++) {
 			char input = line.charAt(i);
+			//need to insert a block to remove whitespace.
+			//whitespace characters that are not newlines will
+			//get pushed on stack, causing error
 			
 			//test input
 			if(st.size() <2 && ((input == '+')||(input == '&')) ){
