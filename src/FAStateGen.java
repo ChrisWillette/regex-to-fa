@@ -87,7 +87,7 @@ public class FAStateGen {
 				faNew.isEmpty = false;
 				st.push(faNew);
 				
-				
+				   
 			}else if(input == '+'){//fa1+fa2
 				FA fa2 = st.pop();
 				FA fa1 = st.pop();
