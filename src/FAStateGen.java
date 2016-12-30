@@ -1,6 +1,5 @@
 /**
  * @author Chris Willette
- * SID 11444663
  */
 
 import java.util.*;
