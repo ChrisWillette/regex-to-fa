@@ -1,2 +1,2 @@
 # regex-to-fa
-converts post-fix regex to FA and outputs FA state table 
+converts post-fix regular expressions into a finite automata and outputs the FA state table 
